@@ -8,7 +8,9 @@ import imbdLogo from '../assets/imbd.png'
 import rottenTomatoesLogo from '../assets/rotten-tomatoes.png'
 import MovieCard from '../components/MovieCard';
 import { Container } from '@mui/material';
-
+import Footer from '../components/Footer';
+import Spinner from '../components/Spinner';
+import {toast} from 'react-toastify';
 function HomePage() {
 const [posterMovieData, setPosterMovieData] = useState(null)
 const [topMovies, setTopMovies] = useState([])
@@ -46,8 +48,11 @@ const [Loading, setLoading] = useState(true)
           const top10Movies = response.data.results.slice(0, 10);
           console.log(top10Movies);
           setTopMovies(top10Movies);
+          // toast.success('Top 10 movies fetched successfully.')
         } catch (error) {
           console.error('Error fetching top movies:', error);
+          toast.error('An error occurred , try again later.');
+          
         }
       };
       
@@ -60,40 +65,42 @@ const [Loading, setLoading] = useState(true)
        <header>
         <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem 5rem 5rem 5rem'}}>
           <img src={Logo} alt="" />
-          <input type="text" placeholder='What do you want to watch?' style={{border: '3px solid white', backgroundColor: 'transparent',  width: "45rem", borderRadius: '1rem', height: '2rem', padding: '0.5rem 1rem', color: 'white' }}/>
+          <input type="text" placeholder='What do you want to watch?' style={{border: '3px solid white', backgroundColor: 'transparent',  width: "45rem", borderRadius: '1rem', height: '1.5rem', padding: '0.5rem 1rem', color: 'white' , textTransform: 'capitalize'}}/>
           <img src={hamButton} alt="" />
         </div>
         { posterMovieData ? (
-          <>
+          <Container>
            <h2 style={{color: 'white', textAlign: 'left', width: '20rem', paddingLeft: '5rem'}}>{posterMovieData.title}</h2>
            <div style={{display: 'flex', width:'13rem', justifyContent: 'space-between', paddingLeft: '5rem'}}>
             <img src={imbdLogo} alt="" />
             <img src={rottenTomatoesLogo} alt="" />
            </div>
         <p style={{color: 'white', textAlign: 'left',  width: '20rem', fontSize:'.7rem', paddingLeft: '5rem'}}>{posterMovieData.overview}</p>
-        </>
+        </Container>
         ) 
         :
         (
-          <p>loading....</p>
+          <p style={{color: 'white'}}>loading....</p>
         )}
        
        </header>
        <main style={{marginTop: '5rem'}}>
-       <div >
-      <h1 style={{textAlign: 'left', fontSize: '1.2rem', paddingLeft: '7rem', marginBottom: '1rem'}}>Top 10 Movies</h1>
+       <Container >
+      <h1 style={{textAlign: 'left', fontSize: '1.2rem', marginBottom: '1rem'}}>Top 10 Movies</h1>
       {Loading ? 
-       (<p>loading..</p>) :
+       (<Spinner/>) :
        (<Container style={{display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '3rem'}}>
        {topMovies.map((movie) => (
         <MovieCard key={movie.id} movie={movie} />
        ))}
      </Container>
    )}
-   </div>
+   </Container>
       
        </main>
+       <Footer/>
        </div>
+       
     </div>
   )
 }
