@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Poster from '../assets/poster.svg';
 import Logo from '../assets/logo.png';
-
 import hamButton from '../assets/ellipse.png';
 import imbdLogo from '../assets/imbd.png';
 import rottenTomatoesLogo from '../assets/rotten-tomatoes.png';
@@ -11,6 +10,8 @@ import { Container } from '@mui/material';
 import Footer from '../components/Footer';
 import Spinner from '../components/Spinner';
 import { toast } from 'react-toastify';
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
+import SearchIcon from '@mui/icons-material/Search';
 
 function HomePage() {
   const [posterMovieData, setPosterMovieData] = useState(null);
@@ -26,7 +27,7 @@ function HomePage() {
         const response = await axios.get(
           `https://api.themoviedb.org/3/search/movie?query=John+Wick&api_key=${apiKey}`
         );
-
+        console.log(response.data.results);
         setPosterMovieData(response.data.results[3]);
         setLoading(false);
       } catch (error) {
@@ -44,7 +45,7 @@ function HomePage() {
         const response = await axios.get(
           `https://api.themoviedb.org/3/movie/top_rated?api_key=${apiKey}&page=1`
         );
-
+        console.log(response.data.results);
         const top10Movies = response.data.results.slice(0, 10);
         setTopMovies(top10Movies);
         
@@ -68,6 +69,7 @@ function HomePage() {
       setLoading(false);
     } catch (error) {
       console.error('Error searching for movies:', error);
+      toast.error('Unable to fetch movies')
       
     }
     setLoading(false);
@@ -75,27 +77,33 @@ function HomePage() {
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
-      <div style={{ width: '100%', height: '27rem', backgroundImage: `url(${Poster})`, backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundSize: 'cover' }}>
+      <div style={{ width: '100%', height: '29rem', backgroundImage: `url(${Poster})`, backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundSize: 'cover' }}>
         <header>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem 5rem 5rem 5rem' }}>
             <img src={Logo} alt="" />
-            <input
-              type="text"
-              placeholder="What do you want to watch?"
-              style={{
-                border: '3px solid white',
-                backgroundColor: 'transparent',
-                width: '45rem',
-                borderRadius: '1rem',
-                height: '1.5rem',
-                padding: '0.5rem 1rem',
-                color: 'white',
-                textTransform: 'capitalize'
-              }}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              value={searchQuery}
-              onInput={ handleSearch}
-            />
+            <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+    <input
+      type="text"
+      placeholder="What do you want to watch?"
+      style={{
+        border: '3px solid white',
+        backgroundColor: 'transparent',
+        width: '45rem',
+        borderRadius: '1rem',
+        height: '1.5rem',
+        padding: '0.5rem 1rem 0.5rem 2rem', 
+        color: 'white',
+        textTransform: 'capitalize'
+      }}
+      onChange={(e) => setSearchQuery(e.target.value)}
+      value={searchQuery}
+     
+    />
+    <div onClick={handleSearch}>
+    <SearchIcon style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'white' }}   />
+    </div>
+   
+  </div>
             <img src={hamButton} alt="" />
           </div>
           {posterMovieData ? (
@@ -106,7 +114,10 @@ function HomePage() {
                 <img src={rottenTomatoesLogo} alt="" />
               </div>
               <p style={{ color: 'white', textAlign: 'left', width: '20rem', fontSize: '.8rem', paddingLeft: '5rem' }}>{posterMovieData.overview}</p>
-               <button style={{marginLeft: '5rem', height: '2.5rem', backgroundColor: 'red', border: 'none', borderRadius: '.5rem'}}>watch later</button>
+               <button style={{marginLeft: '5rem', height: '2.5rem', backgroundColor: '#BE123C', border: 'none', borderRadius: '.5rem', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '7rem'}}>
+                <PlayCircleOutlineIcon sx={{color: 'white'}}/>
+                Watch Later
+                </button>
             </Container>
           ) : (
             <p style={{ color: 'white' }}>Loading....</p>

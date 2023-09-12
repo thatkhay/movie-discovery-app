@@ -7,6 +7,7 @@ import NavBar from '../components/NavBar';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import { toast } from 'react-toastify';
 
+
 function MovieDetails() {
   const { id } = useParams();
   const [movieDetails, setMovieDetails] = useState(null);
@@ -49,7 +50,9 @@ function MovieDetails() {
         setLoading(false);
       } catch (error) {
         console.error('Error fetching movie details:', error);
-        setLoading(false);  
+        setLoading(true); 
+        toast.error('Error fetching movie details, try again later') 
+        
       }
     };
 
@@ -57,12 +60,15 @@ function MovieDetails() {
   }, [id]);
 
   return (
-    <div style={{display: 'flex', alignItems: 'center'}}>
+    <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
       <NavBar/>
 
         <>
         {loading ? (
-        <Spinner />
+          <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+          <Spinner />
+          </div>
+      
       ) : movieDetails ? (
         <Container>
         <img

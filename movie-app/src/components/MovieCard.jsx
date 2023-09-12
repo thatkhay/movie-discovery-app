@@ -1,7 +1,7 @@
 import React from 'react'
 import {Card} from '@mui/material'
 import { Link } from 'react-router-dom'
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+
 function MovieCard({movie}) {
   return (
     <Link to={`/movies/${movie.id}`} style={{textDecoration: 'none'}}>
