@@ -4,7 +4,9 @@ import { useParams } from 'react-router-dom';
 import Spinner from '../components/Spinner';
 import { Container } from '@mui/material';
 import NavBar from '../components/NavBar';
-
+import Staricon from '../assets/star.png'
+import Listicon from '../assets/list.png'
+import Ticketicon from '../assets/ticket.png'
 function MovieDetails() {
   const { id } = useParams();
   const [movieDetails, setMovieDetails] = useState(null);
@@ -94,12 +96,30 @@ function MovieDetails() {
                 {movieDetails.release_date} <span>.</span>
               </p>
               <p data-testid="movie-runtime">
-                {movieDetails.runtime} <span>.</span> minutes
+                {movieDetails.runtime}  min
               </p>
-              <p data-testid="movie-genres">
-                Genres: {genreNames.join(', ')}
-              </p>
+              <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+
+              {/* Display genre names in separate divs */}
+              {genreNames.map((genreName, index) => (
+                <div
+                  key={index}
+                  style={{
+                    border: '1px solid #dcbfc7',
+                    fontSize: '.6rem',
+                    borderRadius: '.6rem',
+                    padding: '.3rem',
+                    margin: '0 .5rem',
+                  }}
+                >
+                  {genreName}
+                </div>
+              ))}
             </div>
+            <p style={{marginLeft: '7rem'}}>fff</p>
+            </div>
+           
+            
             <p
               data-testid="movie-overview"
               style={{
@@ -122,7 +142,7 @@ function MovieDetails() {
               justifyContent: 'center',
             }}
           >
-            <p style={{ color: 'red' }}>Unable  to load movie details, try again later</p>
+            <p style={{ color: 'red' }}>Unable to load movie details, try again later</p>
           </div>
         )}
       </>
