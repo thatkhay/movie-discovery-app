@@ -4,11 +4,28 @@ import { useParams } from 'react-router-dom';
 import Spinner from '../components/Spinner';
 import { Container } from '@mui/material';
 import NavBar from '../components/NavBar';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
+import { toast } from 'react-toastify';
 
 function MovieDetails() {
   const { id } = useParams();
   const [movieDetails, setMovieDetails] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  const toggleFavorite = () => {
+    if (isFavorite) {
+     
+      localStorage.removeItem(movieDetails.id);
+      setIsFavorite(false);
+      toast.info('Movie removed from favorites');
+    } else {
+     
+      localStorage.setItem(movieDetails.id, JSON.stringify(movieDetails));
+      setIsFavorite(true);
+      toast.info('Movie added to favorites'); 
+    }
+  }
 
   const formatToUTCDate = (dateString) => {
     const localDate = new Date(dateString);
@@ -24,10 +41,11 @@ function MovieDetails() {
           `https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}`,
         );
         const formattedDate = formatToUTCDate(response.data.release_date);
-
+        const isMovieInFavorites = localStorage.getItem(response.data.id) !== null;
         
         const updatedMovieDetails = { ...response.data, release_date: formattedDate };
         setMovieDetails(updatedMovieDetails);
+        setIsFavorite(isMovieInFavorites);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching movie details:', error);
@@ -57,6 +75,10 @@ function MovieDetails() {
           <p data-testid="movie-release-date">{movieDetails.release_date}</p>
           <p data-testid="movie-runtime">{movieDetails.runtime} minutes</p>
           <p data-testid="movie-overview">{movieDetails.overview}</p>
+          <BookmarkIcon
+            style={{ cursor: 'pointer', color: isFavorite ? 'red' : 'gray' }}
+            onClick={toggleFavorite}
+          />
         </Container>
       ) : (
         <p>Error loading movie details.</p>

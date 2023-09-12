@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Poster from '../assets/poster.svg';
 import Logo from '../assets/logo.png';
+
 import hamButton from '../assets/ellipse.png';
 import imbdLogo from '../assets/imbd.png';
 import rottenTomatoesLogo from '../assets/rotten-tomatoes.png';
@@ -46,7 +47,7 @@ function HomePage() {
 
         const top10Movies = response.data.results.slice(0, 10);
         setTopMovies(top10Movies);
-        // toast.success('Top 10 movies fetched successfully.')
+        
       } catch (error) {
         console.error('Error fetching top movies:', error);
         toast.error('An error occurred , try again later.');
@@ -67,14 +68,14 @@ function HomePage() {
       setLoading(false);
     } catch (error) {
       console.error('Error searching for movies:', error);
-      // toast.error('An error occurred while searching for movies.');
+      
     }
     setLoading(false);
   };
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
-      <div style={{ width: '100%', height: '25rem', backgroundImage: `url(${Poster})`, backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundSize: 'cover' }}>
+      <div style={{ width: '100%', height: '27rem', backgroundImage: `url(${Poster})`, backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundSize: 'cover' }}>
         <header>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem 5rem 5rem 5rem' }}>
             <img src={Logo} alt="" />
@@ -98,13 +99,14 @@ function HomePage() {
             <img src={hamButton} alt="" />
           </div>
           {posterMovieData ? (
-            <Container>
+            <Container style={{textAlign: 'left'}}>
               <h2 style={{ color: 'white', textAlign: 'left', width: '20rem', paddingLeft: '5rem' }}>{posterMovieData.title}</h2>
               <div style={{ display: 'flex', width: '13rem', justifyContent: 'space-between', paddingLeft: '5rem' }}>
                 <img src={imbdLogo} alt="" />
                 <img src={rottenTomatoesLogo} alt="" />
               </div>
-              <p style={{ color: 'white', textAlign: 'left', width: '20rem', fontSize: '.7rem', paddingLeft: '5rem' }}>{posterMovieData.overview}</p>
+              <p style={{ color: 'white', textAlign: 'left', width: '20rem', fontSize: '.8rem', paddingLeft: '5rem' }}>{posterMovieData.overview}</p>
+               <button style={{marginLeft: '5rem', height: '2.5rem', backgroundColor: 'red', border: 'none', borderRadius: '.5rem'}}>watch later</button>
             </Container>
           ) : (
             <p style={{ color: 'white' }}>Loading....</p>
@@ -126,7 +128,7 @@ function HomePage() {
             </Container>
           </div>
         )}
-        <h1 style={{ textAlign: 'left', fontSize: '1.2rem', marginBottom: '1rem' }}>Top 10 Movies</h1>
+        <h1 style={{ textAlign: 'left', fontSize: '1.2rem', marginBottom: '1rem', marginTop: '3rem' }}>Top 10 Movies</h1>
         {Array.isArray(topMovies) && topMovies.length > 0 && (
   <Container style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '3rem' }}>
     {topMovies.map((movie) => (
