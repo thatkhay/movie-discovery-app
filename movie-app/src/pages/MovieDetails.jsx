@@ -4,34 +4,17 @@ import { useParams } from 'react-router-dom';
 import Spinner from '../components/Spinner';
 import { Container } from '@mui/material';
 import NavBar from '../components/NavBar';
-import BookmarkIcon from '@mui/icons-material/Bookmark';
-import { toast } from 'react-toastify';
-
 
 function MovieDetails() {
   const { id } = useParams();
   const [movieDetails, setMovieDetails] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [genreNames, setGenreNames] = useState([]);
 
-  const toggleFavorite = () => {
-    if (isFavorite) {
-     
-      localStorage.removeItem(movieDetails.id);
-      setIsFavorite(false);
-      toast.info('Movie removed from favorites');
-    } else {
-     
-      localStorage.setItem(movieDetails.id, JSON.stringify(movieDetails));
-      setIsFavorite(true);
-      toast.info('Movie added to favorites'); 
-    }
-  }
-
-  const formatToUTCDate = (dateString) => {
+  const formatToUTCYear = (dateString) => {
     const localDate = new Date(dateString);
-    const utcDate = new Date(localDate.getTime() + localDate.getTimezoneOffset() * 60000);
-    return utcDate.toISOString().split('T')[0];;
+    const utcYear = localDate.getUTCFullYear();
+    return utcYear.toString();
   };
 
   useEffect(() => {
@@ -41,17 +24,28 @@ function MovieDetails() {
         const response = await axios.get(
           `https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}`,
         );
-        const formattedDate = formatToUTCDate(response.data.release_date);
-        const isMovieInFavorites = localStorage.getItem(response.data.id) !== null;
-        
-        const updatedMovieDetails = { ...response.data, release_date: formattedDate };
+        const formattedDate = formatToUTCYear(response.data.release_date);
+
+        // Fetch genre data
+        const genreResponse = await axios.get(
+          `https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}`
+        );
+
+        // Map genre IDs to genre names
+        const genreNames = response.data.genres.map((genre) =>
+          genreResponse.data.genres.find((g) => g.id === genre.id).name
+        );
+
+        setGenreNames(genreNames); // Store genre names in state
+        const updatedMovieDetails = {
+          ...response.data,
+          release_date: formattedDate,
+        };
         setMovieDetails(updatedMovieDetails);
-        setIsFavorite(isMovieInFavorites);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching movie details:', error);
-        setLoading(true); 
-        toast.error('Error fetching movie details, try again later') 
+        setLoading(false);
         
       }
     };
@@ -60,37 +54,78 @@ function MovieDetails() {
   }, [id]);
 
   return (
-    <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
-      <NavBar/>
-
-        <>
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+      <NavBar />
+      <>
         {loading ? (
-          <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-          <Spinner />
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Spinner />
           </div>
-      
-      ) : movieDetails ? (
-        <Container>
-        <img
-        src={`https://image.tmdb.org/t/p/w500/${movieDetails.poster_path}`}
-        alt={movieDetails.title}
-        style={{ height: '15rem', width: 'auto' }}
-                    data-testid="movie-poster"
-                />
-          <h1 data-testid="movie-title">{movieDetails.title}</h1>
-          <p data-testid="movie-release-date">{movieDetails.release_date}</p>
-          <p data-testid="movie-runtime">{movieDetails.runtime} minutes</p>
-          <p data-testid="movie-overview">{movieDetails.overview}</p>
-          <BookmarkIcon
-            style={{ cursor: 'pointer', color: isFavorite ? 'red' : 'gray' }}
-            onClick={toggleFavorite}
-          />
-        </Container>
-      ) : (
-        <p>Error loading movie details.</p>
-      )}
-        </>
-      
+        ) : movieDetails ? (
+          <Container>
+            <img
+              src={`https://image.tmdb.org/t/p/w500/${movieDetails.poster_path}`}
+              alt={movieDetails.title}
+              style={{
+                height: '15rem',
+                width: '50%',
+                borderRadius: '1rem',
+              }}
+              data-testid="movie-poster"
+            />
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <p data-testid="movie-title">
+                {movieDetails.title} <span>.</span>
+              </p>
+              <p data-testid="movie-release-date">
+                {movieDetails.release_date} <span>.</span>
+              </p>
+              <p data-testid="movie-runtime">
+                {movieDetails.runtime} <span>.</span> minutes
+              </p>
+              <p data-testid="movie-genres">
+                Genres: {genreNames.join(', ')}
+              </p>
+            </div>
+            <p
+              data-testid="movie-overview"
+              style={{
+                textAlign: 'left',
+                width: '50%',
+                marginLeft: '18rem',
+                color: 'gray',
+                fontSize: '.8rem',
+              }}
+            >
+              {movieDetails.overview}
+            </p>
+          </Container>
+        ) : (
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <p style={{ color: 'red' }}>Unable  to load movie details, try again later</p>
+          </div>
+        )}
+      </>
     </div>
   );
 }

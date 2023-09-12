@@ -69,7 +69,7 @@ function HomePage() {
       setLoading(false);
     } catch (error) {
       console.error('Error searching for movies:', error);
-      toast.error('Unable to fetch movies')
+      toast.error('Oops! No Movies Found')
       
     }
     setLoading(false);
@@ -80,7 +80,7 @@ function HomePage() {
       <div style={{ width: '100%', height: '29rem', backgroundImage: `url(${Poster})`, backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundSize: 'cover' }}>
         <header>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem 5rem 5rem 5rem' }}>
-            <img src={Logo} alt="" />
+            <img src={Logo} alt="" style={{ cursor: 'pointer' }}/>
             <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
     <input
       type="text"
@@ -100,11 +100,11 @@ function HomePage() {
      
     />
     <div onClick={handleSearch}>
-    <SearchIcon style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'white' }}   />
+    <SearchIcon style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'white', cursor: 'pointer' }}   />
     </div>
    
   </div>
-            <img src={hamButton} alt="" />
+            <img src={hamButton} alt="" style={{ cursor: 'pointer' }} />
           </div>
           {posterMovieData ? (
             <Container style={{textAlign: 'left'}}>
@@ -114,7 +114,7 @@ function HomePage() {
                 <img src={rottenTomatoesLogo} alt="" />
               </div>
               <p style={{ color: 'white', textAlign: 'left', width: '20rem', fontSize: '.8rem', paddingLeft: '5rem' }}>{posterMovieData.overview}</p>
-               <button style={{marginLeft: '5rem', height: '2.5rem', backgroundColor: '#BE123C', border: 'none', borderRadius: '.5rem', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '7rem'}}>
+               <button style={{marginLeft: '5rem', height: '2.5rem', backgroundColor: '#BE123C', border: 'none', borderRadius: '.5rem', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '7rem', cursor: 'pointer' }}>
                 <PlayCircleOutlineIcon sx={{color: 'white'}}/>
                 Watch Later
                 </button>

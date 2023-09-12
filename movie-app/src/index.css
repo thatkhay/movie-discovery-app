@@ -12,7 +12,7 @@ code {
     monospace;
 }
 
-/* Spinner.css */
+
 
 .spinner-container {
   display: flex;
@@ -33,5 +33,28 @@ code {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+
+
+.homeIcon:hover{
+ border-right: 4px solid #BE123C;
+ background-color: #dcbfc7;
+ cursor: pointer;
+}
+.ondemandVideo:hover{
+ border-right: 4px solid #BE123C;
+ background-color: #dcbfc7;
+cursor: pointer;
+}
+.videocamIcon:hover{
+ border-right: 4px solid #BE123C;
+ background-color: #dcbfc7;
+cursor: pointer;
+}
+.upcomingIcon:hover{
+ border-right: 4px solid #BE123C;
+ background-color: #dcbfc7;
+cursor: pointer;
 }
 
