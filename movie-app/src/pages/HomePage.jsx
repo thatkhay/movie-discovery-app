@@ -67,7 +67,7 @@ function HomePage() {
       setLoading(false);
     } catch (error) {
       console.error('Error searching for movies:', error);
-      toast.error('An error occurred while searching for movies.');
+      // toast.error('An error occurred while searching for movies.');
     }
     setLoading(false);
   };
@@ -116,7 +116,7 @@ function HomePage() {
       <Spinner />
     ) : (
       <>
-        {searchQuery && searchResults.length > 0 && (
+        {Array.isArray(searchResults) &&searchQuery && searchResults.length > 0 && (
           <div style={{marginBottom: '3rem'}}>
             <h1 style={{ textAlign: 'left', fontSize: '1.2rem', marginBottom: '2rem' }}>Search Results</h1>
             <Container className="movie-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '3rem' }}>
@@ -127,11 +127,14 @@ function HomePage() {
           </div>
         )}
         <h1 style={{ textAlign: 'left', fontSize: '1.2rem', marginBottom: '1rem' }}>Top 10 Movies</h1>
-        <Container style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '3rem' }}>
-          {topMovies.map((movie) => (
-            <MovieCard key={movie.id} movie={movie} />
-          ))}
-        </Container>
+        {Array.isArray(topMovies) && topMovies.length > 0 && (
+  <Container style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '3rem' }}>
+    {topMovies.map((movie) => (
+      <MovieCard key={movie.id} movie={movie} />
+    ))}
+  </Container>
+)}
+
       </>
     )}
   </Container>
