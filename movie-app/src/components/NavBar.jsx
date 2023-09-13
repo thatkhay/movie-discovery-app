@@ -7,8 +7,11 @@ import OndemandVideo from '@mui/icons-material/OndemandVideo';
 import LogoutIcon from '@mui/icons-material/Logout';
 import '../index.css'
 import { Link } from 'react-router-dom';
+import { useMediaQuery } from '@mui/material';
 
 function NavBar() {
+  const isSmallScreen = useMediaQuery('(max-width: 600px)')
+  const isTabscreen = useMediaQuery('(max-width: 1100px)')
   return (
     <div style={{width: '12rem', border: '4px solid gray', height: '90vh', borderRadius: '0 1rem 1rem 0', padding: '3rem 0'}}>
 <nav style={{display: 'flex', flexDirection:'column', width: '100%', alignItems: 'center', justifyContent: 'center'}}>

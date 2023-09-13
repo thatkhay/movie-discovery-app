@@ -6,8 +6,12 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import axios from 'axios';
 import Imbd from '../assets/imdblogo.png';
 import Rotten from '../assets/rotten.png';
+import { useMediaQuery } from '@mui/material';
 
 function MovieCard({ movie }) {
+  const isSmallScreen = useMediaQuery('(max-width: 600px)')
+  const isTabscreen = useMediaQuery('(max-width: 1100px)')
+  const isPcscreen = useMediaQuery('(min-width: 1110px)')
   const [isFavorite, setIsFavorite] = useState(false);
   const [genre, setGenre] = useState('');
   const [imdbPercentage, setImdbPercentage] = useState('');
@@ -76,7 +80,7 @@ function MovieCard({ movie }) {
         }
       }}
     >
-      <Card className="movie-card" data-testid="movie-card" style={{ position: 'relative' }}>
+      <Card className="movie-card" data-testid="movie-card" style={{ position: 'relative', width: isSmallScreen ? '100%' : 'auto' , marginLeft: isSmallScreen ? '10%' : 'auto'}}>
         <IconButton
           size='small'
           className="favorite-icon"
@@ -109,11 +113,11 @@ function MovieCard({ movie }) {
            <p style={{fontWeight: 'bold'}}>{formattedReleaseYear}</p>
         </p>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 .5rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '34%' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width:isSmallScreen? '30%' : '39%' }}>
             <img src={Imbd} alt="" style={{ height: '.8rem', width: '1.7rem' }} />
             <span style={{ fontSize: '.6rem' }}>{imdbPercentage} / 100</span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '29%' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width:isSmallScreen? '25%': '29%' }}>
             <img src={Rotten} alt="" style={{ height: '.8rem' }} />
             <span style={{ fontSize: '.6rem' }}>{rottenPercentage} / 100</span>
           </div>

@@ -7,7 +7,13 @@ import NavBar from '../components/NavBar';
 import Staricon from '../assets/star.png'
 import Listicon from '../assets/list.png'
 import Ticketicon from '../assets/ticket.png'
+import { useMediaQuery } from '@mui/material';
+import Footer from '../components/Footer';
+
 function MovieDetails() {
+  const isSmallScreen = useMediaQuery('(max-width: 600px)')
+  const isTabscreen = useMediaQuery('(max-width: 1100px)')
+  const isPcscreen = useMediaQuery('(min-width: 1110px)')
   const { id } = useParams();
   const [movieDetails, setMovieDetails] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -56,8 +62,10 @@ function MovieDetails() {
   }, [id]);
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center' }}>
-      <NavBar />
+    <div style={{ display: 'flex', alignItems: 'center', flexDirection: isSmallScreen ? 'column' : 'row' , justifyContent: 'space-between'}}>
+      {!isSmallScreen && <NavBar /> }
+
+      
       <>
         {loading ? (
           <div
@@ -73,11 +81,11 @@ function MovieDetails() {
         ) : movieDetails ? (
           <Container>
             <img
-              src={`https://image.tmdb.org/t/p/w500/${movieDetails.poster_path}`}
+              src={`https://image.tmdb.org/t/p/w500/${movieDetails.backdrop_path}`}
               alt={movieDetails.title}
               style={{
                 height: '15rem',
-                width: '50%',
+                width: isSmallScreen ? '100%' : '30%',
                 borderRadius: '1rem',
               }}
               data-testid="movie-poster"
@@ -87,18 +95,22 @@ function MovieDetails() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                fontWeight: 'bold',
+                color: 'gray',
+                fontSize: isSmallScreen? '.5rem' : '.8rem',
+                width: '100%',
               }}
             >
-              <p data-testid="movie-title">
-                {movieDetails.title} <span>.</span>
+              <p data-testid="movie-title" style={{width: isSmallScreen ? '50%' : '20%'}}>
+                {movieDetails.title} 
               </p>
-              <p data-testid="movie-release-date">
+              <p data-testid="movie-release-date" style={{width: isSmallScreen ? '50%' : '5%'}}>
                 {movieDetails.release_date} <span>.</span>
               </p>
-              <p data-testid="movie-runtime">
+              <p data-testid="movie-runtime" style={{width: isSmallScreen ? '50%' : '5%'}} >
                 {movieDetails.runtime}  min
               </p>
-              <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex' }}>
 
               {/* Display genre names in separate divs */}
               {genreNames.map((genreName, index) => (
@@ -106,7 +118,7 @@ function MovieDetails() {
                   key={index}
                   style={{
                     border: '1px solid #dcbfc7',
-                    fontSize: '.6rem',
+                    fontSize: isSmallScreen ? '.4rem' : '.6rem',
                     borderRadius: '.6rem',
                     padding: '.3rem',
                     margin: '0 .5rem',
@@ -116,22 +128,38 @@ function MovieDetails() {
                 </div>
               ))}
             </div>
-            <p style={{marginLeft: '7rem'}}>fff</p>
+            <div  style={{marginLeft: isSmallScreen ? '3rem' : '6rem', display: 'flex', alignItems: 'center'}}>
+              <img src={Staricon} alt=""  style={{height: '1rem' , width: '1rem', marginRight: '3px'}}/>
+            <p>8.5</p>
             </div>
            
-            
+            </div>
+           
+            <div  style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around'}}>
             <p
               data-testid="movie-overview"
               style={{
                 textAlign: 'left',
                 width: '50%',
-                marginLeft: '18rem',
+                marginLeft: isPcscreen && isTabscreen ?  '18rem' : '2rem',
                 color: 'gray',
                 fontSize: '.8rem',
               }}
             >
               {movieDetails.overview}
             </p>
+            <div  style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'space-between', height: '5rem'}}>
+              <div  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' , fontSize: '.6rem', backgroundColor: '#BE123C', color: 'white', width: '7rem', borderRadius: '.3rem'}}>
+               <img src={Ticketicon} alt=""  style={{height: '1rem' , width: '1rem'}} />
+                <p style={{marginLeft: '4px'}}>jhghg</p>
+              </div>
+              <div  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' , fontSize: '.6rem', backgroundColor: '#dcbfc7', color: 'white', width: '7rem', borderRadius: '.3rem', border: '1px solid #BE123C'}}>
+               <img src={Listicon} alt=""  style={{height: '1rem' , width: '1rem'}} />
+                <p style={{marginLeft: '4px'}}>jhghg</p>
+              </div>
+            </div>
+            </div>
+            
           </Container>
         ) : (
           <div
@@ -146,6 +174,9 @@ function MovieDetails() {
           </div>
         )}
       </>
+      {isSmallScreen && <div style={{width: '100%', alignItems: 'center', justifyContent: 'center', display: 'flex', marginTop: '5rem'}}>
+<Footer/>
+</div>}
     </div>
   );
 }
