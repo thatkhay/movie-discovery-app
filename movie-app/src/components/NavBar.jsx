@@ -47,7 +47,7 @@ function NavBar() {
   <p style={{fontSize: '.7rem', width: '90%'}}>50k people are playing now</p>
   <button style={{border: 'none', borderRadius: '.6rem', height: '1.8rem' , cursor: 'pointer' }}>start playing</button>
 </div>
-<div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+<div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: isTabscreen ? '4rem' : '2rem'}}>
   <LogoutIcon/>
   <p>Log out</p>
 </div>

@@ -9,6 +9,7 @@ import Listicon from '../assets/list.png'
 import Ticketicon from '../assets/ticket.png'
 import { useMediaQuery } from '@mui/material';
 import Footer from '../components/Footer';
+import { Link } from 'react-router-dom';
 
 function MovieDetails() {
   const isSmallScreen = useMediaQuery('(max-width: 600px)')
@@ -79,7 +80,7 @@ function MovieDetails() {
             <Spinner />
           </div>
         ) : movieDetails ? (
-          <Container>
+          <Container style={{padding: '1rem 0 0 0'}}>
             <img
               src={`https://image.tmdb.org/t/p/w500/${movieDetails.backdrop_path}`}
               alt={movieDetails.title}
@@ -128,7 +129,7 @@ function MovieDetails() {
                 </div>
               ))}
             </div>
-            <div  style={{marginLeft: isSmallScreen ? '3rem' : '6rem', display: 'flex', alignItems: 'center'}}>
+            <div  style={{marginLeft: isSmallScreen ? '0' : '6rem', display: 'flex', alignItems: 'center'}}>
               <img src={Staricon} alt=""  style={{height: '1rem' , width: '1rem', marginRight: '3px'}}/>
             <p>8.5</p>
             </div>
@@ -149,7 +150,7 @@ function MovieDetails() {
               {movieDetails.overview}
             </p>
             <div  style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'space-between', height: '5rem'}}>
-              <div  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' , fontSize: '.6rem', backgroundColor: '#BE123C', color: 'white', width: '7rem', borderRadius: '.3rem'}}>
+              <div  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' , fontSize: '.6rem', backgroundColor: '#BE123C', color: 'white', width: '7rem', borderRadius: '.3rem', marginBottom: '1rem',  border: '1px solid #BE123C'}}>
                <img src={Ticketicon} alt=""  style={{height: '1rem' , width: '1rem'}} />
                 <p style={{marginLeft: '4px'}}>jhghg</p>
               </div>
@@ -157,6 +158,11 @@ function MovieDetails() {
                <img src={Listicon} alt=""  style={{height: '1rem' , width: '1rem'}} />
                 <p style={{marginLeft: '4px'}}>jhghg</p>
               </div>
+              <Link to='/' style={{color: '#BE123C'}}>
+            <p style={{textAlign: 'right', marginTop: '4rem'}}>
+              Back To Home
+            </p>
+            </Link>
             </div>
             </div>
             
