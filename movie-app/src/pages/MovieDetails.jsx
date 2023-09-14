@@ -10,6 +10,7 @@ import Ticketicon from '../assets/ticket.png'
 import { useMediaQuery } from '@mui/material';
 import Footer from '../components/Footer';
 import { Link } from 'react-router-dom';
+import PhoneHeader from '../components/PhoneHeader';
 
 function MovieDetails() {
   const isSmallScreen = useMediaQuery('(max-width: 600px)')
@@ -20,10 +21,12 @@ function MovieDetails() {
   const [loading, setLoading] = useState(true);
   const [genreNames, setGenreNames] = useState([]);
 
-  const formatToUTCYear = (dateString) => {
+  const formatToUTCDate = (dateString) => {
     const localDate = new Date(dateString);
-    const utcYear = localDate.getUTCFullYear();
-    return utcYear.toString();
+    const year = localDate.getUTCFullYear();
+    const month = (localDate.getUTCMonth() + 1).toString().padStart(2, '0'); // Month is zero-indexed
+    const day = localDate.getUTCDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
   };
 
   useEffect(() => {
@@ -33,7 +36,7 @@ function MovieDetails() {
         const response = await axios.get(
           `https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}`,
         );
-        const formattedDate = formatToUTCYear(response.data.release_date);
+        const formattedDate = formatToUTCDate(response.data.release_date);
 
         // Fetch genre data
         const genreResponse = await axios.get(
@@ -63,9 +66,12 @@ function MovieDetails() {
   }, [id]);
 
   return (
+    <div>
+
+   
     <div style={{ display: 'flex', alignItems: 'center', flexDirection: isSmallScreen ? 'column' : 'row' , justifyContent: 'space-between'}}>
       {!isSmallScreen && <NavBar /> }
-
+{isSmallScreen && <PhoneHeader/>}
       
       <>
         {loading ? (
@@ -85,12 +91,14 @@ function MovieDetails() {
               src={`https://image.tmdb.org/t/p/w500/${movieDetails.backdrop_path}`}
               alt={movieDetails.title}
               style={{
-                height: '15rem',
-                width: isSmallScreen ? '100%' : '30%',
+                height: isSmallScreen ? '15rem' : '17rem',
+                width: isSmallScreen ? '100%' : '60%',
                 borderRadius: '1rem',
+                marginTop: !isSmallScreen? '-16rem' : '0',
               }}
               data-testid="movie-poster"
             />
+            
             <div
               style={{
                 display: 'flex',
@@ -99,16 +107,16 @@ function MovieDetails() {
                 fontWeight: 'bold',
                 color: 'gray',
                 fontSize: isSmallScreen? '.5rem' : '.8rem',
-                width: '100%',
+                width: '98%',
               }}
             >
               <p data-testid="movie-title" style={{width: isSmallScreen ? '50%' : '20%'}}>
                 {movieDetails.title} 
               </p>
-              <p data-testid="movie-release-date" style={{width: isSmallScreen ? '50%' : '5%'}}>
-                {movieDetails.release_date} <span>.</span>
-              </p>
-              <p data-testid="movie-runtime" style={{width: isSmallScreen ? '50%' : '5%'}} >
+                    <p data-testid="movie-release-date" style={{ width: isSmallScreen ? '40%' : '20%' }}>
+        {formatToUTCDate(movieDetails.release_date)}
+      </p>
+                    <p data-testid="movie-runtime" style={{width: isSmallScreen ? '40%' : '10%'}} >
                 {movieDetails.runtime}  min
               </p>
               <div style={{ display: 'flex' }}>
@@ -180,9 +188,11 @@ function MovieDetails() {
           </div>
         )}
       </>
-      {isSmallScreen && <div style={{width: '100%', alignItems: 'center', justifyContent: 'center', display: 'flex', marginTop: '5rem'}}>
+       
+    </div>
+    <div style={{width: '100%', alignItems: 'center', justifyContent: 'center', display: 'flex', marginTop: '3rem'}}>
 <Footer/>
-</div>}
+</div>
     </div>
   );
 }

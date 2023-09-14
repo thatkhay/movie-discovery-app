@@ -32,7 +32,7 @@ function MovieCard({ movie }) {
         setGenre(genreNames);
 
         // Format the release year
-        const formattedDate = formatToUTCYear(response.data.release_date);
+        const formattedDate = formatToUTCDate(response.data.release_date);
         setFormattedReleaseYear(formattedDate);
       })
       .catch((error) => {
@@ -49,11 +49,14 @@ function MovieCard({ movie }) {
     return `${randomPercentage}%`;
   }
 
-  const formatToUTCYear = (dateString) => {
+  const formatToUTCDate = (dateString) => {
     const localDate = new Date(dateString);
-    const utcYear = localDate.getUTCFullYear();
-    return utcYear.toString();
+    const year = localDate.getUTCFullYear();
+    const month = (localDate.getUTCMonth() + 1).toString().padStart(2, '0'); // Month is zero-indexed
+    const day = localDate.getUTCDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
   };
+  
 
   const toggleFavorite = () => {
     const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
@@ -102,16 +105,16 @@ function MovieCard({ movie }) {
           style={{ height: '15rem', width: '100%' }}
         />
         <p
-          data-testid="movie-release-date"
-          style={{
-            color: 'gray',
-            fontSize: '.6rem',
-            textAlign: 'left',
-            marginLeft: '5px',
-          }}
-        >
-           <p style={{fontWeight: 'bold'}}>{formattedReleaseYear}</p>
-        </p>
+  data-testid="movie-release-date"
+  style={{
+    color: 'gray',
+    fontSize: '.6rem',
+    textAlign: 'left',
+    marginLeft: '5px',
+  }}
+>
+  <p style={{ fontWeight: 'bold' }}>{formatToUTCDate(formattedReleaseYear)}</p>
+</p>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 .5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width:isSmallScreen? '30%' : '39%' }}>
             <img src={Imbd} alt="" style={{ height: '.8rem', width: '1.7rem' }} />
