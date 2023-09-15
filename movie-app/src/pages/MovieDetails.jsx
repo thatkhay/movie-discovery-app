@@ -13,13 +13,16 @@ import { Link } from 'react-router-dom';
 import PhoneHeader from '../components/PhoneHeader';
 
 function MovieDetails() {
-  const isSmallScreen = useMediaQuery('(max-width: 600px)')
+  const isSmallScreen = useMediaQuery('(max-width: 750px)')
   const isTabscreen = useMediaQuery('(max-width: 1100px)')
   const isPcscreen = useMediaQuery('(min-width: 1110px)')
   const { id } = useParams();
   const [movieDetails, setMovieDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [genreNames, setGenreNames] = useState([]);
+  const [videoKey, setVideoKey] = useState(null);
+
+
 
   const formatToUTCDate = (dateString) => {
     const localDate = new Date(dateString);
@@ -55,6 +58,22 @@ function MovieDetails() {
         };
         setMovieDetails(updatedMovieDetails);
         setLoading(false);
+
+        
+        // Fetch movie videos
+        const videoResponse = await axios.get(
+          `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${apiKey}`
+        );
+
+        // Find the first trailer video (you can customize this logic)
+        const trailerVideo = videoResponse.data.results.find(
+          (video) => video.type === 'Trailer'
+        );
+
+        if (trailerVideo) {
+          setVideoKey(trailerVideo.key);
+        }
+
       } catch (error) {
         console.error('Error fetching movie details:', error);
         setLoading(false);
@@ -66,11 +85,11 @@ function MovieDetails() {
   }, [id]);
 
   return (
-    <div>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} >
 
-   
-    <div style={{ display: 'flex', alignItems: 'center', flexDirection: isSmallScreen ? 'column' : 'row' , justifyContent: 'space-between'}}>
-      {!isSmallScreen && <NavBar /> }
+{!isSmallScreen && <NavBar /> }
+    <div style={{ display: 'flex', alignItems: 'center', flexDirection: isSmallScreen ? 'column' : 'column' , justifyContent: 'space-between'}}>
+      
 {isSmallScreen && <PhoneHeader/>}
       
       <>
@@ -87,17 +106,20 @@ function MovieDetails() {
           </div>
         ) : movieDetails ? (
           <Container style={{padding: '1rem 0 0 0'}}>
-            <img
-              src={`https://image.tmdb.org/t/p/w500/${movieDetails.backdrop_path}`}
-              alt={movieDetails.title}
-              style={{
-                height: isSmallScreen ? '15rem' : '17rem',
-                width: isSmallScreen ? '100%' : '60%',
-                borderRadius: '1rem',
-                marginTop: !isSmallScreen? '-16rem' : '0',
-              }}
-              data-testid="movie-poster"
-            />
+            <Container>
+            <iframe
+                src={`https://www.youtube.com/embed/${videoKey}`}
+                title="Movie Trailer"
+                style={{
+                  height: '22rem',
+                  width: '100%',
+                  borderRadius: '1rem',
+                  marginTop: isSmallScreen ? '1rem' : '4rem',
+                }}
+                allowFullScreen
+              />
+            </Container>
+            
             
             <div
               style={{
@@ -144,12 +166,12 @@ function MovieDetails() {
            
             </div>
            
-            <div  style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around'}}>
+            <div  style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', flexDirection: isSmallScreen ? 'column' : 'row'}}>
             <p
               data-testid="movie-overview"
               style={{
                 textAlign: 'left',
-                width: '50%',
+                width: isSmallScreen ? '80%' : '50%',
                 marginLeft: isPcscreen && isTabscreen ?  '18rem' : '2rem',
                 color: 'gray',
                 fontSize: '.8rem',
@@ -158,11 +180,11 @@ function MovieDetails() {
               {movieDetails.overview}
             </p>
             <div  style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'space-between', height: '5rem'}}>
-              <div  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' , fontSize: '.6rem', backgroundColor: '#BE123C', color: 'white', width: '7rem', borderRadius: '.3rem', marginBottom: '1rem',  border: '1px solid #BE123C'}}>
+              <div  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' , fontSize: '.6rem', backgroundColor: '#BE123C', color: 'white', width: isSmallScreen? '15rem' : '7rem', borderRadius: '.3rem', marginBottom: '1rem',  border: '1px solid #BE123C'}}>
                <img src={Ticketicon} alt=""  style={{height: '1rem' , width: '1rem'}} />
                 <p style={{marginLeft: '4px'}}>jhghg</p>
               </div>
-              <div  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' , fontSize: '.6rem', backgroundColor: '#dcbfc7', color: 'white', width: '7rem', borderRadius: '.3rem', border: '1px solid #BE123C'}}>
+              <div  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' , fontSize: '.6rem', backgroundColor: '#dcbfc7', color: 'white', width: isSmallScreen? '15rem' : '7rem', borderRadius: '.3rem', border: '1px solid #BE123C'}}>
                <img src={Listicon} alt=""  style={{height: '1rem' , width: '1rem'}} />
                 <p style={{marginLeft: '4px'}}>jhghg</p>
               </div>
@@ -188,11 +210,11 @@ function MovieDetails() {
           </div>
         )}
       </>
-       
-    </div>
-    <div style={{width: '100%', alignItems: 'center', justifyContent: 'center', display: 'flex', marginTop: '3rem'}}>
+      <div style={{width: '100%', alignItems: 'center', justifyContent: 'center', display: 'flex', marginTop: '3rem'}}>
 <Footer/>
 </div>
+    </div>
+   
     </div>
   );
 }

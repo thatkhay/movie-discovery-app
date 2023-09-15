@@ -15,7 +15,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { useMediaQuery } from '@mui/material';
 
 function HomePage() {
-  const isSmallScreen = useMediaQuery('(max-width: 600px)')
+  const isSmallScreen = useMediaQuery('(max-width: 750px)')
   // const isTabscreen = useMediaQuery('(max-width: 1100px)')
   const isPcscreen = useMediaQuery('(min-width: 1110px)')
 
@@ -145,8 +145,8 @@ function HomePage() {
      
       <>
         {Array.isArray(searchResults) &&searchQuery && searchResults.length > 0 && (
-          <Container style={{marginBottom: '3rem', }}>
-            <h1 style={{ textAlign: 'left', fontSize: '1.2rem', marginBottom: '2rem',  marginTop: isSmallScreen ? '7rem' : '0' }}>Search Results</h1>
+          <Container style={{marginBottom: '3rem', display: 'flex', flexDirection: 'column', marginLeft: isSmallScreen ? '20%' : '0', marginTop: '-2rem'}}>
+            <h1 style={{ textAlign: 'left', fontSize: '1.2rem', marginBottom: '2rem',  marginTop: isSmallScreen ? '-2rem' : '0' }}>Search Results for <span style={{color: 'gray', textTransform: 'capitalize'}}>{searchQuery}</span></h1>
             <Container className="movie-grid" style={{ display: 'grid', gridTemplateColumns: isSmallScreen ? 'repeat(1, 1fr)' : 'repeat(4, 1fr)', gap: '3rem' }}>
               {searchResults.map((movie) => (
                 <MovieCard key={movie.id} movie={movie} />
@@ -154,7 +154,7 @@ function HomePage() {
             </Container>
           </Container>
         )}
-        <Container style={{display: 'flex', flexDirection: 'column', marginLeft: isSmallScreen ? '20%' : '0'}}>
+        <Container style={{display: 'flex', flexDirection: 'column', marginLeft: isSmallScreen ? '20%' : '0', marginTop: '-2rem'}}>
         <h1 style={{ textAlign: 'left', fontSize: '1.2rem', marginBottom: '1rem'}}>Top 10 Movies</h1>
         {Array.isArray(topMovies) && topMovies.length > 0 && (
   <Container style={{ display: 'grid', gridTemplateColumns: isSmallScreen ? 'repeat(1, 1fr)' : 'repeat(4, 1fr)', gap: '3rem' }}>

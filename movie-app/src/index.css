@@ -38,22 +38,22 @@ code {
 
 
 .homeIcon:hover{
- border-right: 4px solid #BE123C;
+
  background-color: #dcbfc7;
  cursor: pointer;
 }
 .ondemandVideo:hover{
- border-right: 4px solid #BE123C;
+
  background-color: #dcbfc7;
 cursor: pointer;
 }
 .videocamIcon:hover{
- border-right: 4px solid #BE123C;
+
  background-color: #dcbfc7;
 cursor: pointer;
 }
 .upcomingIcon:hover{
- border-right: 4px solid #BE123C;
+
  background-color: #dcbfc7;
 cursor: pointer;
 }
