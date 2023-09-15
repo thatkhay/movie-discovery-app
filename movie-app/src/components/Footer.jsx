@@ -19,7 +19,7 @@ function Footer() {
       <p>Privacy & Policy</p>
       <p>Press Room</p>
     </div>
-    <p> © 2021 <span style={{color: 'gray' }}>Movie Discovery App</span> by <span style={{color: 'gray', fontWeight: 'bold'}}>Khay</span></p>
+    <p> © 2021 <span style={{color: 'red' }}>Movie Discovery App</span> by <span style={{color: 'gray', fontWeight: 'bold'}}>Khay</span></p>
     </footer>
   )
 }
